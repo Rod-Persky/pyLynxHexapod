@@ -26,7 +26,7 @@ with open(os.path.join(thisdir, 'README.md')) as file:
     long_description = file.read()
 
 setup(name = 'pyHexa',
-      version = '0.0.0',  # major.minor.revision
+      version = '0.0.2',  # major.minor.revision
       
       platforms = ['Linux', 'Windows'],
       url = 'https://github.com/Rod-Persky/pyHexa',
@@ -69,5 +69,8 @@ setup(name = 'pyHexa',
       zip_safe = True,
       include_package_data = True,
       
-      py_modules = ['ez_setup', 'bottle']
+      py_modules = ['ez_setup'],
+      
+      install_requires=['bottle>=0.11.5',
+                        'cherrypy>=3.2.4'],
       )
