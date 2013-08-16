@@ -1,59 +1,62 @@
+from bottle import route, run, template
+from time import sleep
+from lynxmotion import setposition, setpower
 
-@route('/behavior/stand')
-def stand():
-    for leg in range(0, 3):
-        print("leg", leg)
-        setposition(leg * 3 + 1, 2100)
-        setposition(leg * 3 + 2, 2500)
-    
-        setposition(leg * 3 + 1 + 16, 2100)
-        setposition(leg * 3 + 2 + 16, 2500)
-    
-    sleep(2)
-    
-    for leg in range(0, 3):
-        print("leg", leg)
-        setposition(leg * 3 + 1, 1500, 1000)
-        setposition(leg * 3 + 2, 2100, 600)
-    
-        setposition(leg * 3 + 1 + 16, 1500, 1000)
-        setposition(leg * 3 + 2 + 16, 2100, 600)
+joint_centers = [[2100, 1500, 950, 800, 1400, 2100],
+                 [1500, 1500, 1500, 1500, 1500, 1500],
+                 [2300, 2300, 2350, 2200, 2240, 2250]]
 
+
+@route('/go/start')
+def stand(): 
+    try:
+        if not started:
+            for leg in range(0, 6):
+                setposition(leg, hip_rotation =     joint_centers[0][leg],
+                                 hip_elevation =    joint_centers[1][leg],
+                                 knee_elevation =   joint_centers[2][leg],
+                                 power = 500)
+        else:
+            for leg in range(0, 6):
+                setpower(leg, 0, 0, 0)
+    except Exception as inst:
+        global started
+        started = False
+        print(inst)
+        
+    started = not started
+
+    sleep(1)
+    
+    return template('apiresponse', content='success')
+
+@route('/go/forward')
 @route('/behavior/walk/forwards/<steps:int>')
-def walk_forwards(steps):
-    for leg in range(0, 6):
-        setposition(leg, hip_rotation = joint_centers[0][leg],
-                         hip_elevation = joint_centers[1][leg],
-                         knee_elevation = joint_centers[2][leg],
-                         power = 500)
-     
-    sleep(5)
-     
+def walk_forwards(steps=1):
+    
       
-    while(True):
-        for leg in range(0, 3):
+    for i in range(0, steps):
+        for leg in range(0, 6):
+            # Set Foot
+            setposition(leg, knee_elevation = joint_centers[2][leg], power = 1000)
+            
             # Raise leg
-            setposition(leg, hip_elevation = joint_centers[1][leg]+200,     power = 1000)
-            setposition(leg, hip_elevation = joint_centers[1][5 - leg]+200, power = 1000)
+            setposition(leg, hip_elevation = joint_centers[1][leg]+200, power = 1000)
             sleep(.2)
           
             # Rotate forward
-            setposition(leg, hip_rotation = joint_centers[0][leg]+200,     power = 1000)
-            setposition(leg, hip_rotation = joint_centers[0][5 - leg]+200, power = 1000)
-            sleep(.2)
+            setposition(leg, hip_rotation = joint_centers[0][leg]+200, power = 1000)
+            sleep(.3)
                
-            # Leg down
+            ## Leg down
             setposition(leg, hip_elevation = joint_centers[1][leg],     power = 500)
-            setposition(leg, hip_elevation = joint_centers[1][5 - leg], power = 500)
-            sleep(.5)
+
+        sleep(.5)
                    
         # rotate back
         for leg in range(0, 6):
-            setposition(leg, joint_centers[0][leg]-200, 500)
-             
-        sleep(2)
-      
-      
-    # And relax
-    for leg in range(0, 6):
-        setpower(leg, 0, 0, 0)
+            setposition(leg, hip_rotation = joint_centers[0][leg]-200, power = 500)
+        
+    return template('apiresponse', content='success')
+
+    

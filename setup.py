@@ -26,7 +26,7 @@ with open(os.path.join(thisdir, 'README.md')) as file:
     long_description = file.read()
 
 setup(name = 'pyHexa',
-      version = '0.0.2',  # major.minor.revision
+      version = '0.0.3',  # major.minor.revision
       
       platforms = ['Linux', 'Windows'],
       url = 'https://github.com/Rod-Persky/pyHexa',
@@ -63,7 +63,7 @@ setup(name = 'pyHexa',
       author = 'Rodney Persky',
       author_email = 'rodney.persky@gmail.com',
 
-      packages = ['pyHexa'],
+      packages = find_packages('pyHexa'),
       package_dir = {'pyHexa': 'pyHexa'},
       
       zip_safe = True,

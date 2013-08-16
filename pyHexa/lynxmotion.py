@@ -53,16 +53,19 @@ def setposition(leg, hip_rotation = None, hip_elevation = None, knee_elevation =
     for joint, value in enumerate([hip_rotation, hip_elevation, knee_elevation]):
         if value is not None:
             if joint_reversed[joint][leg]:
-                value = value - (value - joint_centers[joint][leg])
-            command =  '{}#{}P{}S{}'.format(command, leg_number[leg] + joint, int(value), power)
+                value = joint_centers[joint][leg] - (value - joint_centers[joint][leg])
+                command =  '{}#{}P{}S{}'.format(command, leg_number[leg] + joint, int(value), power)
+                
+            else:
+                command =  '{}#{}P{}S{}'.format(command, leg_number[leg] + joint, int(value), power)
             
     command = command + '\r'
-    print("doing command", command)
+    print("doing command", command, end = "")
 
     hexapod.write(command.encode())
     
 
-def setpower(servo, hip_rotation_power = None, hip_elevation_power = None, knee_elevation_power = None):
+def setpower(leg, hip_rotation_power = None, hip_elevation_power = None, knee_elevation_power = None):
     command = ""
     
     for position, value in enumerate([hip_rotation_power, hip_elevation_power, knee_elevation_power]):
