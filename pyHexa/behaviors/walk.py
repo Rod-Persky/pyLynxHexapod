@@ -59,4 +59,117 @@ def walk_forwards(steps=1):
         
     return template('apiresponse', content='success')
 
-    
+@route('/go/backward')
+@route('/behavior/walk/backward/<steps:int>')
+def walk_backward(steps=1):
+      
+    for i in range(0, steps):
+        for leg in range(0, 6):
+            # Set Foot
+            setposition(leg, knee_elevation = joint_centers[2][leg], power = 1000)
+            
+            # Raise leg
+            setposition(leg, hip_elevation = joint_centers[1][leg]+200, power = 1000)
+            sleep(.2)
+          
+            # Rotate backward
+            setposition(leg, hip_rotation = joint_centers[0][leg]-200, power = 1000)
+            sleep(.3)
+               
+            ## Leg down
+            setposition(leg, hip_elevation = joint_centers[1][leg],     power = 500)
+
+        sleep(.5)
+                   
+        # rotate back
+        for leg in range(0, 6):
+            setposition(leg, hip_rotation = joint_centers[0][leg]+200, power = 500)
+        
+    return template('apiresponse', content='success')
+
+
+@route('/go/left')
+@route('/behavior/turn/left/<steps:int>')
+def turn_left(steps=1):
+      
+    for i in range(0, steps):
+        for leg in range(0, 3):
+            # Set Foot
+            setposition(leg, knee_elevation = joint_centers[2][leg], power = 1000)
+            
+            # Raise leg
+            setposition(leg, hip_elevation = joint_centers[1][leg]+200, power = 1000)
+            sleep(.2)
+          
+            # Rotate forward
+            setposition(leg, hip_rotation = joint_centers[0][leg]+200, power = 1000)
+            sleep(.3)
+               
+            ## Leg down
+            setposition(leg, hip_elevation = joint_centers[1][leg],     power = 500)
+            
+        for leg in range(3, 6):
+            # Set Foot
+            setposition(leg, knee_elevation = joint_centers[2][leg], power = 1000)
+            
+            # Raise leg
+            setposition(leg, hip_elevation = joint_centers[1][leg]+200, power = 1000)
+            sleep(.2)
+          
+            # Rotate backward
+            setposition(leg, hip_rotation = joint_centers[0][leg]-200, power = 1000)
+            sleep(.3)
+               
+            ## Leg down
+            setposition(leg, hip_elevation = joint_centers[1][leg],     power = 500)
+
+        sleep(.5)
+                   
+        # rotate center
+        for leg in range(0, 6):
+            setposition(leg, hip_rotation = joint_centers[0][leg], power = 500)
+        
+    return template('apiresponse', content='success')
+
+@route('/go/right')
+@route('/behavior/turn/right/<steps:int>')
+def turn_left(steps=1):
+      
+    for i in range(0, steps):
+        for leg in range(0, 3):
+            # Set Foot
+            setposition(leg, knee_elevation = joint_centers[2][leg], power = 1000)
+            
+            # Raise leg
+            setposition(leg, hip_elevation = joint_centers[1][leg]+200, power = 1000)
+            sleep(.2)
+          
+            # Rotate backward
+            setposition(leg, hip_rotation = joint_centers[0][leg]-200, power = 1000)
+            sleep(.3)
+               
+            ## Leg down
+            setposition(leg, hip_elevation = joint_centers[1][leg],     power = 500)
+            
+        for leg in range(3, 6):
+            # Set Foot
+            setposition(leg, knee_elevation = joint_centers[2][leg], power = 1000)
+            
+            # Raise leg
+            setposition(leg, hip_elevation = joint_centers[1][leg]+200, power = 1000)
+            sleep(.2)
+          
+            # Rotate forward
+            setposition(leg, hip_rotation = joint_centers[0][leg]+200, power = 1000)
+            sleep(.3)
+               
+            ## Leg down
+            setposition(leg, hip_elevation = joint_centers[1][leg],     power = 500)
+
+        sleep(.5)
+                   
+        # rotate center
+        for leg in range(0, 6):
+            setposition(leg, hip_rotation = joint_centers[0][leg], power = 500)
+        
+    return template('apiresponse', content='success')
